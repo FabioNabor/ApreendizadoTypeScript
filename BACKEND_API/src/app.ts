@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { AppDataSource } from '../database/dataSource'
+import { AppDataSource, initialize } from '../database/dataSource'
 
 
 const app = express()
@@ -15,7 +15,7 @@ app.get('/')
 app.listen(3000, async () => {
     console.log("Server iniciado com sucesso!")
     try {
-        await AppDataSource;
+        await initialize;
         console.log("Banco de Dados Carregado com Sucesso!")
     } catch (error) {
         console.log(`Houve algum erro com o banco de dados ${error}`)

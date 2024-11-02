@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm"
-import iUsuario from "../protocols/usuario"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from "typeorm"
+import { Demandas } from "./eDemands"
+import { userPermission } from "./eUsuariosPermission"
 
 @Entity({name:"cadastroUsuario"})
 export class User extends BaseEntity {
@@ -8,36 +9,38 @@ export class User extends BaseEntity {
     @Column({
         type:"varchar",
         length: 100,
-        unique: true
+        unique: true,
+        nullable: false
     })
     userLogin:string
     @Column({
         type:"varchar",
         length: 255,
+        nullable: false
     })
     userEmail:string
     @Column({
         type:"varchar",
         length: 255,
+        nullable: false
     })
     userName:string
     @Column({
         type:"varchar",
         length: 120,
+        nullable: false
     })
     userSetor:string
     @Column({
         type:"varchar",
         length: 255,
+        nullable: false
     })
     userPassword:string
 
-    constructor(usuario:iUsuario) {
-        super()
-        this.userLogin = usuario.Login
-        this.userEmail = usuario.Email
-        this.userName = usuario.Name
-        this.userSetor = usuario.Setor
-        this.userPassword = usuario.Password
-    }
+    @OneToMany(() => userPermission, permissao => permissao.user)
+    userPermissions:userPermission[]
+
+    @OneToMany(() => Demandas, demanda => demanda.usuario)
+    userDemands:Demandas[]
 }

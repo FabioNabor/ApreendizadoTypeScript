@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm"
 import { User } from "./eUsuario"
+import { statusDemand } from "../Enums"
 
 @Entity({name:"usuariosDemandas"})
 export class Demandas extends BaseEntity {
@@ -26,11 +27,11 @@ export class Demandas extends BaseEntity {
     descricaoDemands:string
 
     @Column({
-        type:"varchar",
-        length: 150,
-        nullable: false
+        type: "enum",
+        enum: statusDemand,
+        default: statusDemand.AGUARDANDO
     })
-    statusDemands:string
+    statusDemands:statusDemand
 
     @ManyToOne(() => User, user => user.userDemands)
     usuario:User

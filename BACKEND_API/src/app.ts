@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { AppDataSource, initialize } from '../database/dataSource'
+import { AppDataSource,  } from '../database/dataSource'
 
 
 const app = express()
@@ -8,16 +8,15 @@ const app = express()
 
 app.use(cors());
 
+app.use(express.json());
 
 app.get('/')
 
 
-app.listen(3000, async () => {
-    console.log("Server iniciado com sucesso!")
-    try {
-        await initialize;
-        console.log("Banco de Dados Carregado com Sucesso!")
-    } catch (error) {
-        console.log(`Houve algum erro com o banco de dados ${error}`)
-    }
+AppDataSource.initialize().then(async () => {
+    console.log("DataBase Carregada com sucesso!");
+    app.listen(3030, () => {
+        console.log("Server inicializado na porta 3030!")
+    })
 })
+

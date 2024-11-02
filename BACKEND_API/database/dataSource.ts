@@ -11,9 +11,3 @@ export const AppDataSource = new DataSource({
     subscribers: [],
 })
 
-export const initialize = (async () => {
-    if (!AppDataSource.isInitialized) { 
-        await AppDataSource.initialize();
-        return AppDataSource as DataSource;
-    }
-})();

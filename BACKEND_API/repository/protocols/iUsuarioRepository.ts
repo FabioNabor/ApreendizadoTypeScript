@@ -3,6 +3,7 @@ import { Demandas } from "../../database/entities/Demands"
 import iUsuario from "./iUsuario";
 import iDemand from "./iDemand";
 import { User } from "../../database/entities/Usuario";
+import iAlterPassword from "./iAlterPassword";
 
 export default interface iUsuarioRepository {
     criarUsuario(novoUser:iUsuario): Promise<User>
@@ -10,5 +11,5 @@ export default interface iUsuarioRepository {
     excluirDemandas(id:number):Promise<boolean>;
     listarDemandas(uuid:string):Promise<Demandas[]>;
     listarPermissions(uuid:string):Promise<userPermission[]>
-    alterarSenha(uuid:string, firstPassoword:string, novaPassword:string):Promise<boolean>;
+    alterarSenha(alterpassword:iAlterPassword):Promise<boolean>;
 }

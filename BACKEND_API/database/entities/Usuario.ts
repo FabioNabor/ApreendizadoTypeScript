@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany, BeforeInsert, BeforeUpdate } from "typeorm"
 import { Demandas } from "./Demands"
 import { userPermission } from "./UsuariosPermission"
+import { hash, genSalt } from "bcrypt"
 
 @Entity({name:"cadastroUsuario"})
 export class User extends BaseEntity {
@@ -43,4 +44,17 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Demandas, demanda => demanda.usuario)
     userDemands:Demandas[]
+
+    @BeforeInsert()
+    async hashPassword() {
+        const salt = await genSalt(12)
+        this.userPassword = await hash(this.userPassword, salt)
+    }
+    @BeforeUpdate()
+    async hashPasswordUpdate() {
+        if (this.userPassword) {
+            const salt = await genSalt(12)
+            this.userPassword = await hash(this.userPassword, salt)
+        }
+    }
 }

@@ -6,6 +6,8 @@ import { User } from "../database/entities/Usuario";
 import { AppDataSource } from "../database/dataSource";
 import iDemand from "./protocols/iDemand";
 import iUsuario from "./protocols/iUsuario";
+import { compare } from "bcrypt";
+import iAlterPassword from "./protocols/iAlterPassword";
 
 export class UsuarioRepository implements iUsuarioRepository {
 
@@ -95,14 +97,18 @@ export class UsuarioRepository implements iUsuarioRepository {
             throw new Error("Ocorreu um erro ao tentar listar as demandas" + error)
         }
     }
-    async alterarSenha(uuid: string, firstPassoword: string, novaPassword: string): Promise<boolean> {
+    async alterarSenha(alterpassword:iAlterPassword): Promise<boolean> {
         try {
+            const {uuid, fistpassword, novaPassword} = alterpassword
             const user = await this.userConn
                 .findOneBy({
                     id:uuid
                 })
             if (!user) throw new Error("Usuário informado, não foi encontrado!");
-            if (user.userPassword !== firstPassoword) throw new Error("Senha incorreta!");
+            const comparar = await compare(fistpassword, user.userPassword)
+            if (!comparar) throw new Error("Senha incorreta!");
+            const compararnovasenha = await compare(novaPassword, user.userPassword)
+            if (compararnovasenha) throw new Error("Você não pode alterar a senha para a mesma que está usando atualmente!");
             user.userPassword = novaPassword
             await this.userConn.save(user)
             return true

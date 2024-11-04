@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity,OneToMany } from "typeorm"
-import { User } from "./eUsuario"
-import { userPermission } from "./eUsuariosPermission"
+import { userPermission } from "./UsuariosPermission"
 
 @Entity({name:"permissions"})
 export class Permission extends BaseEntity {

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev ./src/app.ts"
+    "dev": "ts-node-dev ./src/app.ts",
+    "mig": "npx typeorm migration:generate -d database/dataSource.ts -n TablesNecessarias"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,8 @@
   "dependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",

@@ -1,9 +1,14 @@
-import { userPermission } from "../../database/entities/eUsuariosPermission"
-import { Demandas } from "../../database/entities/eDemands"
+import { userPermission } from "../../database/entities/UsuariosPermission"
+import { Demandas } from "../../database/entities/Demands"
+import iUsuario from "./iUsuario";
+import iDemand from "./iDemand";
+import { User } from "../../database/entities/Usuario";
 
-export default interface iUsuarioRepository<T> {
+export default interface iUsuarioRepository {
+    criarUsuario(novoUser:iUsuario): Promise<User>
+    criarDemand(novoUser:iDemand): Promise<Demandas>
+    excluirDemandas(id:number):Promise<boolean>;
     listarDemandas(uuid:string):Promise<Demandas[]>;
-    excluirDemandas(uuid:string):Promise<boolean>;
     listarPermissions(uuid:string):Promise<userPermission[]>
     alterarSenha(uuid:string, firstPassoword:string, novaPassword:string):Promise<boolean>;
 }

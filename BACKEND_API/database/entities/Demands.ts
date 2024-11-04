@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm"
-import { User } from "./eUsuario"
+import { User } from "./Usuario"
 import { statusDemand } from "../Enums"
 
 @Entity({name:"usuariosDemandas"})

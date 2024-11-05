@@ -4,25 +4,39 @@ import { userPermission } from "../database/entities/UsuariosPermission";
 import iUsuarioRepository from "./protocols/iUsuarioRepository";
 import { User } from "../database/entities/Usuario";
 import { AppDataSource } from "../database/dataSource";
-import iDemand from "./protocols/iDemand";
+import { iDeleteDemand, iDemand } from "./protocols/iDemand";
 import iUsuario from "./protocols/iUsuario";
 import { compare } from "bcrypt";
 import iAlterPassword from "./protocols/iAlterPassword";
+import { UserService } from "../services/UsuarioService";
 
 export class UsuarioRepository implements iUsuarioRepository {
 
     private readonly demandConn:Repository<Demandas>
     private readonly permissionConn:Repository<userPermission>
     private readonly userConn:Repository<User>
+    private readonly userservice:UserService
 
     constructor() {
         this.demandConn = AppDataSource.getRepository(Demandas);
         this.permissionConn = AppDataSource.getRepository(userPermission);
         this.userConn = AppDataSource.getRepository(User);
+        this.userservice = new UserService();
     }
 
     async criarUsuario(novoUser: iUsuario): Promise<User> {
         try {
+            const user = await this.userConn
+                .findOneBy({
+                    id:novoUser.uuid
+                })
+            if (!user) throw new Error("Usuário que está tentando fazer a criação do novo usuário não existe");
+            
+            await this.userservice.containsPermission({
+                uuid:user.id,
+                idpermission: 2
+            })
+
             const nuser = new User()
             const {name, login, email, setor, password} = novoUser 
             nuser.userName = name
@@ -33,7 +47,7 @@ export class UsuarioRepository implements iUsuarioRepository {
             await this.userConn.save(nuser)
             return nuser
         } catch (error) {
-            throw new Error("Ocorreu um erro ao tentar criar o novo usuário" + error)
+            throw new Error("CREATE NEW USER: "+error)
         }
     }
     async criarDemand(novoUser: iDemand): Promise<Demandas> {
@@ -44,6 +58,12 @@ export class UsuarioRepository implements iUsuarioRepository {
                     id:uuidUser
                 })
             if (!user) throw new Error("Usuário informado, não foi encontrado!");
+
+            await this.userservice.containsPermission({
+                uuid:user.id,
+                idpermission: 3
+            })
+
             const demand = new Demandas()
             demand.nameDemand = nome
             demand.descricaoDemands = descricao
@@ -51,17 +71,23 @@ export class UsuarioRepository implements iUsuarioRepository {
             await this.demandConn.save(demand)
             return demand
         } catch (error) {
-            throw new Error("Ocorreu um erro ao tentar criar a demanda" + error)
+            throw new Error("CREATE NEW DEMAND: "+error)
         }
     }
-    async excluirDemandas(id:number): Promise<boolean> {
+    async excluirDemandas(deldemand:iDeleteDemand): Promise<boolean> {
         try {
-            const user = await this.demandConn
-                .findOneBy({
-                    id:id
+            await this.userservice.containsPermission({
+                uuid:deldemand.uuidOwner,
+                idpermission: 4
+            })
+            const findDemandsUser = await this.userConn
+                .findOne({
+                    where: {id:deldemand.uuidOwner},
+                    relations: ['usuariosDemandas']
                 })
-            if (!user) throw new Error("Demanda informada, não foi encontrada!");
-            await this.demandConn.remove(user)
+            const demand = findDemandsUser?.usuariosDemandas.find(demand => demand.id === deldemand.idDemand)
+            if (!demand) throw new Error("Demanda informada, não foi encontrada!");
+            await this.demandConn.remove(demand)
             return true
         } catch (error) {
             throw new Error("Ocorreu um erro" + error)
@@ -105,6 +131,12 @@ export class UsuarioRepository implements iUsuarioRepository {
                     id:uuid
                 })
             if (!user) throw new Error("Usuário informado, não foi encontrado!");
+
+            await this.userservice.containsPermission({
+                uuid:user.id,
+                idpermission: 5
+            })
+
             const comparar = await compare(fistpassword, user.userPassword)
             if (!comparar) throw new Error("Senha incorreta!");
             const compararnovasenha = await compare(novaPassword, user.userPassword)

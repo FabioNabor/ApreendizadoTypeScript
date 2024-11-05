@@ -7,6 +7,20 @@ export class Permission extends BaseEntity {
     id:number
 
     @Column({
+        type:"varchar",
+        length:150,
+        nullable: false
+    })
+    permissionModulo:string
+
+    @Column({
+        type:"varchar",
+        length:150,
+        nullable: false
+    })
+    permissionName:string
+    
+    @Column({
         type:"timestamptz",
         default: () => 'CURRENT_TIMESTAMP'
     })

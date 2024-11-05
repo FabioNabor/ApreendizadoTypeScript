@@ -33,7 +33,7 @@ export class Demandas extends BaseEntity {
     })
     statusDemands:statusDemand
 
-    @ManyToOne(() => User, user => user.userDemands)
+    @ManyToOne(() => User, user => user.usuariosDemandas)
     usuario:User
     
 }

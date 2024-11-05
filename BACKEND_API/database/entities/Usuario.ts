@@ -40,10 +40,10 @@ export class User extends BaseEntity {
     userPassword:string
 
     @OneToMany(() => userPermission, permissao => permissao.user)
-    userPermissions:userPermission[]
+    usuariosPermission:userPermission[]
 
     @OneToMany(() => Demandas, demanda => demanda.usuario)
-    userDemands:Demandas[]
+    usuariosDemandas:Demandas[]
 
     @BeforeInsert()
     async hashPassword() {

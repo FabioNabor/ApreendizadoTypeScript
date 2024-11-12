@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { AppDataSource,  } from '../database/dataSource'
-import { routes } from '../routes/Usuario';
+import { routes } from '../routes/UserRoutes';
 
 
 const app = express()

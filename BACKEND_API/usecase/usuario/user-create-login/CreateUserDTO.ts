@@ -1,4 +1,4 @@
-export interface UsuarioInputDTO {
+export interface CreateUserInputDTO {
     user: {
         name:string
         email:string
@@ -7,7 +7,7 @@ export interface UsuarioInputDTO {
         password:string
     }
 }
-export interface UsuarioOutputDTO {
+export interface CreateUserOutputDTO {
     user: {
         id:string
         name:string

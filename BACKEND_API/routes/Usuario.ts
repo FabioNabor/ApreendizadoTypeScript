@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { createNewUser, alterPassword } from "../controllers/UsuarioController";
+import { Request, Response, Router } from "express";
+import { createUserController } from "../usecase/usuario/usuario-create-login";
 
 export const routes = Router()
 
 
-routes.post('/createuser', createNewUser)
-
-routes.put('/alterpassword', alterPassword)
+routes.post('/create-user', async (request: Request, response: Response) => {
+    return await createUserController.handle(request, response) as any;
+});

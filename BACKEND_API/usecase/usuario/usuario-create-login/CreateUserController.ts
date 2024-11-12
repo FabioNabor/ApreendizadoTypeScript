@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from "./CreateUserUseCase";
 import { Request, Response } from "express";
-import { UsuarioInputDTO } from "./UsuarioDTO";
+import { UsuarioInputDTO } from "./CreateUserDTO";
 
 export class CreateUserController {
     constructor(
@@ -19,7 +19,7 @@ export class CreateUserController {
                     password
                 }
             }
-            const user = this.createUseCase.execute(userInput);
+            const user = await this.createUseCase.execute(userInput);
             return response.status(201).json(user);
         } catch (err: unknown) {
             if (err instanceof Error) {

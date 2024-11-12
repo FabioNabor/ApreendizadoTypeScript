@@ -16,6 +16,6 @@ export class userPermission extends BaseEntity {
     @ManyToOne(() => Permission, permission => permission.permission)
     permission:Permission
 
-    @ManyToOne(() => User, user => user.userDemands)
+    @ManyToOne(() => User, user => user.usuariosDemandas)
     user:User
 }

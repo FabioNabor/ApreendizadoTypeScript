@@ -37,7 +37,7 @@ export class CreateUserController {
             }
             const user = await this.createUseCase.execute(userInput);
             return response.status(201).json(user);
-        } catch (err: unknown) {
+        } catch (err) {
             if (err instanceof Error) {
                 return response.status(400).json({
                     status:400,

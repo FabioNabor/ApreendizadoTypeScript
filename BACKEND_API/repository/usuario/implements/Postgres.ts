@@ -5,11 +5,16 @@ import { User } from "../../../database/entities/Usuario";
 import { iCreateUserRepository } from "../../User/iCreateUserRepository";
 import { iAlterPasswordRepository } from "../../User/iAlterPasswordRepository";
 import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../../usecase/usuario/user-alter-password/AlterPasswordDTO";
+import { iCreateDemandRepository } from "../../User/iCreateDemandRepository";
+import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../../usecase/usuario/user-create-demand/CreateDemandDTO";
+import { Demandas } from "../../../database/entities/Demands";
+import { statusDemand } from "../../../database/Enums";
 
-export class Postgres implements iCreateUserRepository, iAlterPasswordRepository {
+export class Postgres implements iCreateUserRepository, iAlterPasswordRepository, iCreateDemandRepository {
 
     constructor(
-        private repositoryUser:Repository<User>
+        private repositoryUser:Repository<User>,
+        private repositoryDemand:Repository<Demandas>
     ){}
     
     async create(userInput: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
@@ -62,5 +67,26 @@ export class Postgres implements iCreateUserRepository, iAlterPasswordRepository
             }
         }
         return alterOutput
+    }
+
+    async createDemand(demand: CreateDemandInputDTO): Promise<CreateDemandOutputDTO> {
+        const user = await this.repositoryUser.findOneBy({
+            userLogin:demand.demandInput.login
+        })
+        if (!user) throw new Error("Usuário não encontrado!");
+        const create = new Demandas()
+        create.nameDemand = demand.demandInput.name
+        create.usuario = user
+        create.descricaoDemands = demand.demandInput.description
+        const save:Demandas = await this.repositoryDemand.save(create)
+        const demandOutput:CreateDemandOutputDTO = {
+            demandOutput:{
+                id:save.id,
+                status:statusDemand[save.statusDemands],
+                name:save.nameDemand,
+                owner:user.userLogin
+            }
+        }
+        return demandOutput
     }
 }

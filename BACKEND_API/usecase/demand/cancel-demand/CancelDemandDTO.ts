@@ -1,7 +1,7 @@
 
 export interface CancelDemandInputDTO {
     input : {
-        ownerId:string
+        id:string
         demandId:number
     }
 }

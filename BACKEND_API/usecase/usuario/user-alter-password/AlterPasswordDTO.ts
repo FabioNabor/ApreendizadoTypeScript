@@ -1,6 +1,6 @@
 export interface AlterPasswordInputDtO {
     input : {
-        login:string
+        id:string
         oldPassword:string
         newPassword:string
     }

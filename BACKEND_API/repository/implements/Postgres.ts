@@ -1,22 +1,34 @@
-import { CreateUserInputDTO, CreateUserOutputDTO } from "../../../usecase/usuario/user-create-login/CreateUserDTO";
+import { CreateUserInputDTO, CreateUserOutputDTO } from "../../usecase/usuario/user-create-login/CreateUserDTO";
 import { compare } from "bcrypt";
 import { Repository } from "typeorm";
-import { User } from "../../../database/entities/Usuario";
-import { iUserRepository } from "../../user/iUserRepository";
-import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../../usecase/usuario/user-alter-password/AlterPasswordDTO";
-import { iDemandRepository } from "../../demand/iDemandRepository";
-import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../../usecase/demand/create-demand/CreateDemandDTO";
-import { Demandas } from "../../../database/entities/Demands";
-import { statusDemand } from "../../../database/Enums";
-import { CancelDemandInputDTO, CancelDemandOutputDTO } from "../../../usecase/demand/cancel-demand/CancelDemandDTO";
-import { AlterStatusWhInputDTO, AlterStatusWhOutputDTO } from "../../../usecase/demand/alter-status-webhook/AlterStatusWhDTO";
+import { User } from "../../database/entities/Usuario";
+import { iUserRepository } from "../user/iUserRepository";
+import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../usecase/usuario/user-alter-password/AlterPasswordDTO";
+import { iDemandRepository } from "../demand/iDemandRepository";
+import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../usecase/demand/create-demand/CreateDemandDTO";
+import { Demandas } from "../../database/entities/Demands";
+import { statusDemand } from "../../database/Enums";
+import { CancelDemandInputDTO, CancelDemandOutputDTO } from "../../usecase/demand/cancel-demand/CancelDemandDTO";
+import { AlterStatusWhInputDTO, AlterStatusWhOutputDTO } from "../../usecase/demand/alter-status-webhook/AlterStatusWhDTO";
+import { userPermission } from "../../database/entities/UsuariosPermission";
 
 export class Postgres implements iUserRepository, iDemandRepository {
 
     constructor(
         private repositoryUser:Repository<User>,
-        private repositoryDemand:Repository<Demandas>
+        private repositoryDemand:Repository<Demandas>,
+        private repositoryPermissionUser:Repository<userPermission>
     ){}
+
+    async havePermission(idUser: string, idPermission: number): Promise<boolean> {
+        const permission = await this.repositoryPermissionUser.findOne({
+            where:{
+                id:idPermission,
+                user:{id:idUser}
+            },
+        });
+        return !!permission
+    }
     
     async create(userInput: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
         const user = new User();
@@ -34,9 +46,9 @@ export class Postgres implements iUserRepository, iDemandRepository {
             }
         }
     }
-    async find(login: string): Promise<CreateUserOutputDTO | null> {
+    async find(id: string): Promise<CreateUserOutputDTO | null> {
         const user = await this.repositoryUser.findOneBy({
-            userLogin:login
+            id:id
         })
         if (!user) {
             return user
@@ -50,9 +62,22 @@ export class Postgres implements iUserRepository, iDemandRepository {
         }
     }
     
+    async findCredentials(login: string): Promise<{id:string, name:string, email:string, password:string}> {
+        const user = await this.repositoryUser.findOneBy({
+            userLogin:login
+        })
+        if (!user) throw new Error("Usuário não encontrado!");
+        return {
+            id:user.id,
+            name:user.userName,
+            email:user.userEmail,
+            password:user.userPassword
+        }
+    }
+    
     async alterPassword(alterInput: AlterPasswordInputDtO): Promise<AlterPasswordOutputDtO> {
         const user = await this.repositoryUser.findOneBy({
-            userLogin:alterInput.input.login
+            id:alterInput.input.id
         })
         if (!user) throw new Error("Usuário não encontrado!");
         const check = await compare(alterInput.input.oldPassword, user.userPassword) 
@@ -72,7 +97,7 @@ export class Postgres implements iUserRepository, iDemandRepository {
     
     async createDemand(demand: CreateDemandInputDTO): Promise<CreateDemandOutputDTO> {
         const user = await this.repositoryUser.findOneBy({
-            userLogin:demand.input.login
+            id:demand.input.id
         })
         if (!user) throw new Error("Usuário não encontrado!");
         const create = new Demandas()

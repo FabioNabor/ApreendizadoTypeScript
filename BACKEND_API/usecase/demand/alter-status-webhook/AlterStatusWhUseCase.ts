@@ -1,5 +1,6 @@
 import { statusDemand } from "../../../database/Enums";
 import { iDemandRepository } from "../../../repository/demand/iDemandRepository";
+import { iUserRepository } from "../../../repository/user/iUserRepository";
 import { UseCase } from "../../UseCase";
 import { AlterStatusWhInputDTO, AlterStatusWhOutputDTO } from "./AlterStatusWhDTO";
 
@@ -7,7 +8,7 @@ export class AlterStatusWhUseCase
     implements UseCase<AlterStatusWhInputDTO, AlterStatusWhOutputDTO> {
 
     constructor(
-        private repositoryDemand:iDemandRepository
+        private repositoryDemand:iDemandRepository,
     ){}
 
     async execute(data: AlterStatusWhInputDTO): Promise<AlterStatusWhOutputDTO> {

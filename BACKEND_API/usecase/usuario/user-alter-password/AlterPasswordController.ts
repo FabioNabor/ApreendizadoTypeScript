@@ -9,13 +9,13 @@ export class AlterPasswordController {
     ){}
 
     private AlterPasswordInputSchema = z.object({
-        login:z.string().nonempty("Login é obrigatório.").min(8, "Mínimo de 8 caracters para o login."),
         oldPassword:z.string().nonempty("Informe a senha antiga").min(8, "O tamanho minímo da senha é de 8 caractes"),
         newPassword:z.string().nonempty("Informe a nova senha").min(8, "O tamanho minímo da senha é de 8 caractes")
     })
 
     async handle(request:Request, response:Response) : Promise<Response> {
         try {
+            const {id} = request.body.infUser
             const validBody = this.AlterPasswordInputSchema.safeParse(request.body);
             if (!validBody.success) {
                 return response.status(400).json({
@@ -23,10 +23,10 @@ export class AlterPasswordController {
                     errors: validBody.error.errors,
                   });
             } 
-            const {login, oldPassword, newPassword} = validBody.data
+            const {oldPassword, newPassword} = validBody.data
             const data:AlterPasswordInputDtO = {
                 input : {
-                    login,
+                    id,
                     oldPassword,
                     newPassword
                 }

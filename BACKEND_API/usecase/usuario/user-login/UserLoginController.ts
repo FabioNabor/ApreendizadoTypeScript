@@ -1,44 +1,40 @@
-import { CreateUserUseCase } from "./CreateUserUseCase";
+import { z } from "zod";
 import { Request, Response } from "express";
-import { CreateUserInputDTO } from "./CreateUserDTO";
-import {z} from "zod"
+import { UserLoginUseCase } from "./UserLoginUseCase";
+import { UserLoignInputDTO, UserLoignOutputDTO } from "./UserLoginDTO";
 
-export class CreateUserController {
+export class UserLoginController {
     constructor(
-        private createUseCase:CreateUserUseCase
+        private userLoginUseCase:UserLoginUseCase
     ){}
-
-    private CreateUserInputSchema = z.object({
-        name:z.string().nonempty("Nome do novo usuário é obrigatório!"),
+    private UserLoginInputSchema = z.object({
         email:z.string().nonempty("E-mail é obrigatório!").email("E-mail inválido."),
-        login:z.string().nonempty("Login é obrigatório.").min(8, "Mínimo de 15 caracters para o login."),
-        sector:z.string().nonempty("Setor é obrigatório."),
+        login:z.string().nonempty("Login é obrigatório.").min(8, "Mínimo de 8 caracters para o login."),
         password:z.string().nonempty("Senha é obrigatório").min(8, "Mínimo de 8 caracters para a senha!.")
     })
 
     async handle(request:Request, response:Response) : Promise<Response> {
-        try { 
-            const {id} = request.body.infUser
-            const validBody = this.CreateUserInputSchema.safeParse(request.body);
+        try {
+            const validBody = this.UserLoginInputSchema.safeParse(request.body);
             if (!validBody.success) {
                 return response.status(400).json({
                     message: "Dados inválidos",
                     errors: validBody.error.errors,
                   });
             } 
-            const {name, email, login, sector, password} = validBody.data
-            const userInput:CreateUserInputDTO = {
-                input:{
-                    id,
-                    name,
-                    email,
+            const {email, login, password} = validBody.data
+            const input:UserLoignInputDTO = {
+                input : {
                     login,
-                    sector,
+                    email,
                     password
                 }
             }
-            const user = await this.createUseCase.execute(userInput);
-            return response.status(201).json(user);
+            const output:UserLoignOutputDTO = await this.userLoginUseCase.execute(input)
+            return response.status(200).json({
+                status:200,
+                output
+            })
         } catch (err) {
             if (err instanceof Error) {
                 return response.status(400).json({

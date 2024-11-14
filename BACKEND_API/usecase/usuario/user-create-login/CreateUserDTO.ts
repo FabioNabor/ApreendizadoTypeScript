@@ -1,5 +1,6 @@
 export interface CreateUserInputDTO {
     input: {
+        id:string
         name:string
         email:string
         login:string

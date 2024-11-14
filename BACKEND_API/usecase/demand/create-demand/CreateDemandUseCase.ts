@@ -11,7 +11,7 @@ export class CreateDemandUseCase
     ){}
 
     async execute(demand:CreateDemandInputDTO):Promise<CreateDemandOutputDTO> {
-        const userExists = await this.userRepository.find(demand.input.login)
+        const userExists = await this.userRepository.find(demand.input.id)
         if (!userExists) throw new Error("Usuário não existe!")
         const create:CreateDemandOutputDTO = await this.demandRepository.createDemand(demand)
         return create

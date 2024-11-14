@@ -9,7 +9,6 @@ export class CreateDemandController {
     ){}
 
     private CreateDemandInputSchema = z.object({
-        login:z.string().nonempty("Informe o login do usuário que deseja criar a demanda."),
         name:z.string().nonempty("Nome é obrigatório!").min(10, "Mínimo de 10 caracters para o nome.")
             .max(100, "Máximo de 100 caracters"),
         description:z.string().nonempty("Descrição é obrigatório.").min(30, "Mínimo de 30 caracters para a descrição.")
@@ -18,6 +17,7 @@ export class CreateDemandController {
 
     async handle(request:Request, response:Response) : Promise<Response> {
         try {
+            const {id} = request.body.infUser
             const validBody = this.CreateDemandInputSchema.safeParse(request.body);
             if (!validBody.success) {
                 return response.status(400).json({
@@ -25,10 +25,10 @@ export class CreateDemandController {
                     errors: validBody.error.errors,
                   });
             } 
-            const {login, name, description} = validBody.data
+            const {name, description} = validBody.data
             const demandInput:CreateDemandInputDTO = {
                 input:{
-                    login,
+                    id,
                     name,
                     description
                 }

@@ -15,6 +15,7 @@ export class AlterStatusWhController {
 
     async handle(request:Request, response:Response) : Promise<Response> {
         try {
+            const {id:idUser} = request.body.infUser
             const validBody = this.AlterStatusWhInputSchema.safeParse(request.body);
             if (!validBody.success) {
                 return response.status(400).json({
@@ -25,6 +26,7 @@ export class AlterStatusWhController {
             const {id, status} = validBody.data
             const data:AlterStatusWhInputDTO = {
                 input : {
+                    idUser,
                     id,
                     status
                 }

@@ -2,7 +2,7 @@ import { statusDemand } from "../../../database/Enums"
 
 export interface CreateDemandInputDTO {
     input : {
-        login:string
+        id:string
         name:string
         description:string
     }

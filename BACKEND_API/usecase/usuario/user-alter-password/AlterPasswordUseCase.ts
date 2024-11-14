@@ -5,11 +5,11 @@ import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "./AlterPasswordDT
 export class AlterPasswordUseCase 
     implements UseCase<AlterPasswordInputDtO, AlterPasswordOutputDtO>{
     constructor(
-        private iUserRepository:iUserRepository
+        private userRepository:iUserRepository
     ){}
 
     async execute(data:AlterPasswordInputDtO):Promise<AlterPasswordOutputDtO> {
-        const alterOutput:AlterPasswordOutputDtO = await this.iUserRepository
+        const alterOutput:AlterPasswordOutputDtO = await this.userRepository
                 .alterPassword(data)
         return alterOutput
     }

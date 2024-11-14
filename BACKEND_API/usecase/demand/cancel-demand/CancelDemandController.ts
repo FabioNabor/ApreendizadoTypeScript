@@ -8,11 +8,11 @@ export class CancelDemandController {
         private cancelDemandUseCase:CancelDemandUseCase
     ){}
     private DeleteDemandInputSchema = z.object({
-        ownerId:z.string().nonempty("Informe o id do dono da demanda"),
         demandId:z.number()
     })
     async handle(request:Request, response:Response) : Promise<Response> {
         try {
+            const {id} = request.body.infUser
             const validBody = this.DeleteDemandInputSchema.safeParse(request.body);
             if (!validBody.success) {
                 return response.status(400).json({
@@ -20,10 +20,10 @@ export class CancelDemandController {
                     errors: validBody.error.errors,
                     });
             } 
-            const {ownerId, demandId} = validBody.data
+            const {demandId} = validBody.data
             const demandInput:CancelDemandInputDTO = {
                 input:{
-                    ownerId,
+                    id,
                     demandId
                 }
             }

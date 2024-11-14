@@ -1,7 +1,7 @@
 import { statusDemand } from "../../../database/Enums"
 
 export interface CreateDemandInputDTO {
-    demandInput : {
+    input : {
         login:string
         name:string
         description:string
@@ -9,7 +9,7 @@ export interface CreateDemandInputDTO {
 }
 
 export interface CreateDemandOutputDTO {
-    demandOutput : {
+    output : {
         id:number
         status:string
         name:string

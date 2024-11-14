@@ -27,7 +27,7 @@ export class CreateDemandController {
             } 
             const {login, name, description} = validBody.data
             const demandInput:CreateDemandInputDTO = {
-                demandInput:{
+                input:{
                     login,
                     name,
                     description
@@ -36,7 +36,7 @@ export class CreateDemandController {
             const create:CreateDemandOutputDTO = await this.createDemandUseCase.execute(demandInput)
             return response.status(201).json({
                 status:201,
-                demandInf:create.demandOutput
+                demandInf:create.output
             })
         } catch (err) {
             if (err instanceof Error) {

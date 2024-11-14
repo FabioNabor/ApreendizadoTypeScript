@@ -1,7 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import { AppDataSource,  } from '../database/dataSource'
-import { routes } from '../routes/UserRoutes';
+import { userRoutes } from '../routes/UserRoutes';
+import { demandRoutes } from '../routes/DemandRoutes';
 
 
 const app = express()
@@ -11,7 +12,7 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use('/api', routes)
+app.use('/api', [userRoutes, demandRoutes])
 
 
 AppDataSource.initialize().then(async () => {

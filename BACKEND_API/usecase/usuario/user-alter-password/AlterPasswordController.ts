@@ -25,7 +25,7 @@ export class AlterPasswordController {
             } 
             const {login, oldPassword, newPassword} = validBody.data
             const data:AlterPasswordInputDtO = {
-                alterInput : {
+                input : {
                     login,
                     oldPassword,
                     newPassword
@@ -34,7 +34,7 @@ export class AlterPasswordController {
             const alter = await this.alterPasswordUseCase.execute(data)
             return response.status(200).json({
                 status:200,
-                message:alter.alterOutput
+                message:alter.output
             })
         } catch (err) {
             if (err instanceof Error) {

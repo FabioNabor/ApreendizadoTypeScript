@@ -1,5 +1,5 @@
 export interface AlterPasswordInputDtO {
-    alterInput : {
+    input : {
         login:string
         oldPassword:string
         newPassword:string
@@ -7,7 +7,7 @@ export interface AlterPasswordInputDtO {
 }
 
 export interface AlterPasswordOutputDtO {
-    alterOutput : {
+    output : {
         login:string
         message:string
     }

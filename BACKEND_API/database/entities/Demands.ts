@@ -33,6 +33,9 @@ export class Demandas extends BaseEntity {
     })
     statusDemands:statusDemand
 
+    @Column()
+    usuarioId:string
+
     @ManyToOne(() => User, user => user.usuariosDemandas)
     usuario:User
     

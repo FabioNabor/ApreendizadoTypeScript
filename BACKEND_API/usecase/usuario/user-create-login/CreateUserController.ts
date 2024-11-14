@@ -27,7 +27,7 @@ export class CreateUserController {
             } 
             const {name, email, login, sector, password} = validBody.data
             const userInput:CreateUserInputDTO = {
-                user:{
+                input:{
                     name,
                     email,
                     login,

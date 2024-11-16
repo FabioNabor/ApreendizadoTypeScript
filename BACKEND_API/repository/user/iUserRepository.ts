@@ -1,5 +1,5 @@
-import { CreateUserOutputDTO,CreateUserInputDTO } from "../../usecase/usuario/user-create-login/CreateUserDTO";
-import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../usecase/usuario/user-alter-password/AlterPasswordDTO";
+import { CreateUserOutputDTO,CreateUserInputDTO } from "../../usecase/user/user-create-login/CreateUserDTO";
+import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../usecase/user/user-alter-password/AlterPasswordDTO";
 
 
 export interface iUserRepository {

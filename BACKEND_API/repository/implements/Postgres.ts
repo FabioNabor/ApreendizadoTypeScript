@@ -1,22 +1,23 @@
-import { CreateUserInputDTO, CreateUserOutputDTO } from "../../usecase/usuario/user-create-login/CreateUserDTO";
+import { CreateUserInputDTO, CreateUserOutputDTO } from "../../usecase/user/user-create-login/CreateUserDTO";
 import { compare } from "bcrypt";
 import { Repository } from "typeorm";
-import { User } from "../../database/entities/Usuario";
+import { User } from "../../database/entities/RegisterUser";
 import { iUserRepository } from "../user/iUserRepository";
-import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../usecase/usuario/user-alter-password/AlterPasswordDTO";
+import { AlterPasswordInputDtO, AlterPasswordOutputDtO } from "../../usecase/user/user-alter-password/AlterPasswordDTO";
 import { iDemandRepository } from "../demand/iDemandRepository";
 import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../usecase/demand/create-demand/CreateDemandDTO";
-import { Demandas } from "../../database/entities/Demands";
+import { Demands } from "../../database/entities/Demands";
 import { statusDemand } from "../../database/Enums";
 import { CancelDemandInputDTO, CancelDemandOutputDTO } from "../../usecase/demand/cancel-demand/CancelDemandDTO";
 import { AlterStatusWhInputDTO, AlterStatusWhOutputDTO } from "../../usecase/demand/alter-status-webhook/AlterStatusWhDTO";
-import { userPermission } from "../../database/entities/UsuariosPermission";
+import { userPermission } from "../../database/entities/UserPermission";
+import { ListDemandOutputDTO } from "../../usecase/demand/list-demand/ListDemandDTO";
 
 export class Postgres implements iUserRepository, iDemandRepository {
 
     constructor(
         private repositoryUser:Repository<User>,
-        private repositoryDemand:Repository<Demandas>,
+        private repositoryDemand:Repository<Demands>,
         private repositoryPermissionUser:Repository<userPermission>
     ){}
 
@@ -100,15 +101,15 @@ export class Postgres implements iUserRepository, iDemandRepository {
             id:demand.input.id
         })
         if (!user) throw new Error("Usuário não encontrado!");
-        const create = new Demandas()
+        const create = new Demands()
         create.nameDemand = demand.input.name
-        create.usuario = user
-        create.descricaoDemands = demand.input.description
-        const save:Demandas = await this.repositoryDemand.save(create)
+        create.user = user
+        create.descriptionDemand = demand.input.description
+        const save:Demands = await this.repositoryDemand.save(create)
         const demandOutput:CreateDemandOutputDTO = {
             output:{
                 id:save.id,
-                status:statusDemand[save.statusDemands],
+                status:statusDemand[save.statusDemand],
                 name:save.nameDemand,
                 owner:user.userLogin
             }
@@ -121,12 +122,12 @@ export class Postgres implements iUserRepository, iDemandRepository {
             id:input.input.demandId
         })
         if (!demandFind) throw new Error("Demanda não encontrada!");
-        demandFind.statusDemands = statusDemand.CANCELADA
+        demandFind.statusDemand = statusDemand.CANCELADA
         const save = await demandFind.save()
         const cancelOutput:CancelDemandOutputDTO = {
             output: {
                 name:save.nameDemand,
-                status:statusDemand[save.statusDemands],
+                status:statusDemand[save.statusDemand],
                 message:"Demanda cancelado com sucesso!"
             }
         }
@@ -141,8 +142,8 @@ export class Postgres implements iUserRepository, iDemandRepository {
             if (!demandFind) return null;
             return {
                 id:id,
-                ownerId:demandFind.usuarioId,
-                status: demandFind.statusDemands
+                ownerId:demandFind.userId,
+                status: demandFind.statusDemand
             }
         } catch (error) {
             console.log(error)
@@ -160,7 +161,7 @@ export class Postgres implements iUserRepository, iDemandRepository {
                 message:"Demanda não encontrada em nossa base"
             }
         };
-        demandFind.statusDemands = input.input.status
+        demandFind.statusDemand = input.input.status
         await demandFind.save()
         return {
             output: {
@@ -169,4 +170,28 @@ export class Postgres implements iUserRepository, iDemandRepository {
             }
         }
     }
+
+    async list(id: string): Promise<ListDemandOutputDTO[]> {
+        const user = await this.repositoryUser.findOne({
+            where:{id},
+            relations: ["userDemands"]
+        })
+        if (!user) throw new Error("Usuário não encontrado!");
+
+        if (!user.userDemands || user.userDemands.length === 0) {
+            throw new Error("Nenhuma demanda encontrada para este usuário!");
+        }
+
+        const demands:ListDemandOutputDTO[] = user.userDemands.map((demand) => ({
+            output:
+            {id: demand.id,
+            name: demand.nameDemand,
+            dataUpdate: demand.dateUpdate,
+            status: statusDemand[demand.statusDemand],
+            description: demand.descriptionDemand,}
+        }));
+        return demands
+        
+    }
+
 }

@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm"
-import { User } from "./Usuario"
+import { User } from "./RegisterUser"
 import { Permission } from "./Permission"
 
-@Entity({name:"usuariosPermission"})
+@Entity({name:"userPermissions"})
 export class userPermission extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
@@ -11,11 +11,11 @@ export class userPermission extends BaseEntity {
         type:"timestamptz",
         default: () => 'CURRENT_TIMESTAMP'
     })
-    dataAtulizacao:Date
+    dateUpdate:Date
 
     @ManyToOne(() => Permission, permission => permission.permission)
     permission:Permission
 
-    @ManyToOne(() => User, user => user.usuariosDemandas)
+    @ManyToOne(() => User, user => user.userPermissions)
     user:User
 }

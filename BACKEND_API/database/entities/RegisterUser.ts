@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany, BeforeInsert, BeforeUpdate } from "typeorm"
-import { Demandas } from "./Demands"
-import { userPermission } from "./UsuariosPermission"
+import { userPermission } from "./UserPermission"
 import { hash, genSalt } from "bcrypt"
+import { Demands } from "./Demands"
 
-@Entity({name:"cadastroUsuario"})
+@Entity({name:"registerUser"})
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id!:string
@@ -39,11 +39,11 @@ export class User extends BaseEntity {
     })
     userPassword:string
 
-    @OneToMany(() => userPermission, permissao => permissao.user)
-    usuariosPermission:userPermission[]
+    @OneToMany(() => userPermission, permission => permission.user)
+    userPermissions:userPermission[]
 
-    @OneToMany(() => Demandas, demanda => demanda.usuario)
-    usuariosDemandas:Demandas[]
+    @OneToMany(() => Demands, demand => demand.user)
+    userDemands:Demands[]
 
     @BeforeInsert()
     async hashPassword() {

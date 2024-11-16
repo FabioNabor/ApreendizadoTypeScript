@@ -1,4 +1,4 @@
-import { User } from "../../../database/entities/Usuario";
+import { User } from "../../../database/entities/RegisterUser";
 import { iUserRepository } from "../../../repository/user/iUserRepository";
 import { UseCase } from "../../UseCase";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "./CreateUserDTO";

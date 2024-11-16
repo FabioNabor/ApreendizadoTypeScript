@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from "typeorm"
-import { User } from "./Usuario"
+import { User } from "./RegisterUser"
 import { statusDemand } from "../Enums"
 
-@Entity({name:"usuariosDemandas"})
-export class Demandas extends BaseEntity {
+@Entity({name:"demands"})
+export class Demands extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
 
@@ -11,7 +11,7 @@ export class Demandas extends BaseEntity {
         type:"timestamptz",
         default: () => 'CURRENT_TIMESTAMP'
     })
-    dataAtulizacao:Date
+    dateUpdate:Date
 
     @Column({
         type:"varchar",
@@ -24,19 +24,19 @@ export class Demandas extends BaseEntity {
         nullable: false
         
     })
-    descricaoDemands:string
+    descriptionDemand:string
 
     @Column({
         type: "enum",
         enum: statusDemand,
         default: statusDemand.AGUARDANDO
     })
-    statusDemands:statusDemand
+    statusDemand:statusDemand
 
     @Column()
-    usuarioId:string
+    userId:string
 
-    @ManyToOne(() => User, user => user.usuariosDemandas)
-    usuario:User
+    @ManyToOne(() => User, user => user.userDemands)
+    user:User
     
 }

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity,OneToMany } from "typeorm"
-import { userPermission } from "./UsuariosPermission"
+import { userPermission } from "./UserPermission"
 
 @Entity({name:"permissions"})
 export class Permission extends BaseEntity {
@@ -11,7 +11,7 @@ export class Permission extends BaseEntity {
         length:150,
         nullable: false
     })
-    permissionModulo:string
+    permissionModule:string
 
     @Column({
         type:"varchar",
@@ -24,13 +24,13 @@ export class Permission extends BaseEntity {
         type:"timestamptz",
         default: () => 'CURRENT_TIMESTAMP'
     })
-    dataAtulizacao:Date
+    dataUpdate:Date
 
     @Column({
         type:"varchar",
         nullable: false
     })
-    permissionDescricao:string
+    permissionDescription:string
 
     @OneToMany(() => userPermission, permissao => permissao.permission)
     permission:userPermission[]

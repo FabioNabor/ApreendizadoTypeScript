@@ -1,11 +1,15 @@
 import { Request, Response, Router } from "express";
-import { alterstatuscontroller, createDemandController, deleteDemandController, permission } from "../usecase";
+import { alterstatuscontroller, createDemandController, deleteDemandController, listDemandsController, permission } from "../usecase";
 import { auth } from "../middleware/auth";
 
 export const demandRoutes = Router()
 
 demandRoutes.post('/create-demand', auth, permission.checkPermission(3), async (request: Request, response: Response) => {
     return await createDemandController.handle(request, response) as any;
+});
+
+demandRoutes.get('/list-demand', auth, async (request: Request, response: Response) => {
+    return await listDemandsController.handle(request, response) as any;
 });
 
 demandRoutes.delete('/cancel-demand', auth, permission.checkPermission(4), async (request: Request, response: Response) => {

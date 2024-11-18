@@ -9,7 +9,7 @@ export class CreateUserUseCase
         private userRepository:iUserRepository
     ) {}
     async execute(data:CreateUserInputDTO):Promise<CreateUserOutputDTO> {
-        const userExists = await this.userRepository.find(data.input.login)
+        const userExists = await this.userRepository.findLogin(data.input.login)
         console.log(userExists)
         if (userExists) throw new Error("Já existe um usuário com esse login cadastrado.");
         const user:CreateUserOutputDTO = await this.userRepository.create(data)

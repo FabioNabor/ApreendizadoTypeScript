@@ -6,6 +6,7 @@ export interface iUserRepository {
     create(userInput:CreateUserInputDTO):Promise<CreateUserOutputDTO>
     alterPassword(alterInput:AlterPasswordInputDtO):Promise<AlterPasswordOutputDtO>
     find(id:string):Promise<CreateUserOutputDTO | null>
+    findLogin(login:string):Promise<CreateUserOutputDTO | null>
     findCredentials(login:string):Promise<{id:string, name:string, email:string, password:string}>
-    havePermission(idUser:string, idPermission:number):Promise<boolean>
+    listPermissions(id:string):Promise<number[]>
 }

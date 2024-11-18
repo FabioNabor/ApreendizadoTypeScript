@@ -14,12 +14,14 @@ export class UserLoginUseCase
     async execute(data: UserLoignInputDTO): Promise<UserLoignOutputDTO> {
         const credentials = await this.userRepository.findCredentials(data.input.login);
         if (credentials.email !== data.input.email) throw new Error("Credenciais incorretas!");
+        const permissions = await this.userRepository.listPermissions(credentials.id)
         const comparePassword = compare(data.input.password, credentials.password)
         if (!comparePassword) throw new Error("Senha inválida!");
         const token = await authService.genToken({
             id:credentials.id,
             login:data.input.login,
-            name:credentials.name
+            name:credentials.name,
+            permissions:permissions
         })
         const output:UserLoignOutputDTO = {
             output : {

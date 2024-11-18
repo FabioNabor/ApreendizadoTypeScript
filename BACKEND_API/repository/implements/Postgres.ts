@@ -21,14 +21,14 @@ export class Postgres implements iUserRepository, iDemandRepository {
         private repositoryPermissionUser:Repository<userPermission>
     ){}
 
-    async havePermission(idUser: string, idPermission: number): Promise<boolean> {
-        const permission = await this.repositoryPermissionUser.findOne({
+    async listPermissions(id: string): Promise<number[]> {
+        const permission = await this.repositoryPermissionUser.find({
             where:{
-                id:idPermission,
-                user:{id:idUser}
+                user:{id:id}
             },
         });
-        return !!permission
+        const list = permission.map(idp => idp.id)
+        return list
     }
     
     async create(userInput: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
@@ -50,6 +50,22 @@ export class Postgres implements iUserRepository, iDemandRepository {
     async find(id: string): Promise<CreateUserOutputDTO | null> {
         const user = await this.repositoryUser.findOneBy({
             id:id
+        })
+        if (!user) {
+            return user
+        }
+        return {
+            output : {
+                id:user.id,
+                name:user.userName,
+                login:user.userLogin
+            }
+        }
+    }
+
+    async findLogin(login: string): Promise<CreateUserOutputDTO | null> {
+        const user = await this.repositoryUser.findOneBy({
+            userLogin:login
         })
         if (!user) {
             return user

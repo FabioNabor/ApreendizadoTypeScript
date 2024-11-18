@@ -5,6 +5,7 @@ interface LoginInputDTO {
     id:string
     login:string
     name:string
+    permissions:number[]
 }
 
 export const authService = {
@@ -12,7 +13,8 @@ export const authService = {
         const token = await sign({
             id:input.id,
             login:input.login,
-            name:input.name
+            name:input.name,
+            permissions:input.permissions
         },
         process.env.JWT_SECRET as string,
         {

@@ -1,6 +1,5 @@
 import { BaseControllerService, HttpMethod, Route, RouteConstructor } from "../route";
 import { UseCase } from "../../usecase/UseCase";
-import { ListDemandOutputDTO } from "../../usecase/demand/list-demand/ListDemandDTO";
 import { ListDemandUseCase } from "../../usecase/demand/list-demand/ListDemandUseCase";
 import { Request, Response } from "express";
 
@@ -16,7 +15,8 @@ export class ListDemandController
         return new ListDemandController({
             path:"/list-demand",
             method:HttpMethod.GET,
-            service:service
+            service:service,
+            auth:true
         })
     }
 

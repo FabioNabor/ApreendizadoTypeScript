@@ -1,8 +1,8 @@
 import {z} from "zod"
 import { Request, Response } from "express";
 import { CreateDemandUseCase } from "../../usecase/demand/create-demand/CreateDemandUseCase";
-import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../usecase/demand/create-demand/CreateDemandDTO";
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
+import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../DTOs/demand/CreateDemandDTO";
 
 export class CreateDemandController extends BaseControllerService{
 
@@ -10,7 +10,7 @@ export class CreateDemandController extends BaseControllerService{
 
     public static create(service:CreateDemandUseCase) {
         return new CreateDemandController({
-            path:"/alter-password",
+            path:"/create-demand",
             method:HttpMethod.POST,
             service:service,
             auth:true,

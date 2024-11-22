@@ -1,4 +1,5 @@
-import { statusDemand } from "../../../database/Enums"
+import { statusDemand } from "../../database/Enums"
+
 
 export interface AlterStatusWhInputDTO {
     input : {
@@ -11,6 +12,5 @@ export interface AlterStatusWhInputDTO {
 export interface AlterStatusWhOutputDTO {
     output : {
         sucess:boolean
-        message:string
     }
 }

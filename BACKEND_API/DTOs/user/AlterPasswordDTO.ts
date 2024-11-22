@@ -1,3 +1,5 @@
+import { User } from "../../database/entities/RegisterUser"
+
 export interface AlterPasswordInputDtO {
     input : {
         id:string
@@ -8,7 +10,6 @@ export interface AlterPasswordInputDtO {
 
 export interface AlterPasswordOutputDtO {
     output : {
-        login:string
-        message:string
+        sucess:boolean
     }
 }

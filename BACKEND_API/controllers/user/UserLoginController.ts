@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Request, Response } from "express";
 import { UserLoginUseCase } from "../../usecase/user/user-login/UserLoginUseCase";
-import { UserLoignInputDTO, UserLoignOutputDTO } from "../../usecase/user/user-login/UserLoginDTO";
+import { UserLoignInputDTO, UserLoignOutputDTO } from "../../DTOs/user/UserLoginDTO";
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
 
 export class UserLoginController extends BaseControllerService {

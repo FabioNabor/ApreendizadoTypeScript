@@ -12,6 +12,7 @@ export const checkPermission = (number:number) => {
             })
             return;
         };
+        next();
     }
 }
 

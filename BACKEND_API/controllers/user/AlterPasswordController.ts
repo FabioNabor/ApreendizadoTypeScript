@@ -1,8 +1,9 @@
-import { BaseControllerService, HttpMethod, RouteConstructor } from "../../route";
-import { AlterPasswordInputDtO } from "./AlterPasswordDTO";
-import { AlterPasswordUseCase } from "./AlterPasswordUseCase";
+
 import { Request, Response } from "express";
 import {z} from "zod"
+import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
+import { AlterPasswordUseCase } from "../../usecase/user/user-alter-password/AlterPasswordUseCase";
+import { AlterPasswordInputDtO } from "../../DTOs/user/AlterPasswordDTO";
 
 export class AlterPasswordController extends BaseControllerService{
 

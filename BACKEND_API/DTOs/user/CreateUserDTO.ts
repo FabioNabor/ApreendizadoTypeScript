@@ -10,7 +10,6 @@ export interface CreateUserInputDTO {
 }
 export interface CreateUserOutputDTO {
     output: {
-        id:string
         name:string
         login:string
     }

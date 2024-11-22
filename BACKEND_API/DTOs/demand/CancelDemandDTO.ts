@@ -8,8 +8,6 @@ export interface CancelDemandInputDTO {
 
 export interface CancelDemandOutputDTO {
     output : {
-        name:string
-        status:string
-        message:string
+        sucess:boolean
     }
 }

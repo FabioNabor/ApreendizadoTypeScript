@@ -1,8 +1,8 @@
 import { AlterStatusWhUseCase } from "../../usecase/demand/alter-status-webhook/AlterStatusWhUseCase";
 import { Request, Response } from "express";
 import {z} from "zod"
-import { AlterStatusWhInputDTO } from "../../usecase/demand/alter-status-webhook/AlterStatusWhDTO";
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
+import { AlterStatusWhInputDTO } from "../../DTOs/demand/AlterStatusWhDTO";
 
 export class AlterStatusWhController extends BaseControllerService{
 

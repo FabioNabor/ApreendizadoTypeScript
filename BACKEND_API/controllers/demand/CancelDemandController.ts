@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Request, Response } from "express";
 import { CancelDemandUseCase } from "../../usecase/demand/cancel-demand/CancelDemandUseCase";
-import { CancelDemandInputDTO } from "../../usecase/demand/cancel-demand/CancelDemandDTO";
+import { CancelDemandInputDTO } from "../../DTOs/demand/CancelDemandDTO";
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
 
 export class CancelDemandController extends BaseControllerService{
@@ -11,7 +11,7 @@ export class CancelDemandController extends BaseControllerService{
     public static create(service:CancelDemandUseCase) {
         return new CancelDemandController({
             path:"/cancel-demand",
-            method:HttpMethod.PUT,
+            method:HttpMethod.DELETE,
             service:service,
             auth:true,
         })

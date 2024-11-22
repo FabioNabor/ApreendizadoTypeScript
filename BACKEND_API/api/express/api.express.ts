@@ -3,6 +3,7 @@ import { checkPermission } from "../../middleware/permission";
 import { Route } from "../../controllers/route";
 import { Api } from "./api";
 import express, { Express, Router } from "express";
+import { logger } from "../../middleware/requestLogger";
 
 export class ExpressApi implements Api {
 
@@ -32,6 +33,7 @@ export class ExpressApi implements Api {
             const middleware = [
                 ...(isauth? [auth]:[]),
                 ...(permission !== 0 ? [checkPermission(permission)]:[]),
+                logger
             ];
             this.route[method](path, ...middleware, handler);
             // this.app.use("/api")[method](path, ...middleware, handler);
@@ -46,7 +48,7 @@ export class ExpressApi implements Api {
     }
 
     private listRoutes() {
-        const routes = this.app._router.stack
+        const routes = this.route.stack
             .filter((route: any) => route.route)
             .map((route: any) => {
                 return {

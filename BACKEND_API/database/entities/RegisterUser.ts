@@ -57,4 +57,12 @@ export class User extends BaseEntity {
             this.userPassword = await hash(this.userPassword, salt)
         }
     }
+
+    constructor(
+        props?:Partial<User>
+    ){
+        super();
+        Object.assign(this, props)
+    }
+
 }

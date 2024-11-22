@@ -1,4 +1,4 @@
-import { statusDemand } from "../../../database/Enums"
+import { User } from "../../database/entities/RegisterUser"
 
 export interface CreateDemandInputDTO {
     input : {
@@ -10,7 +10,6 @@ export interface CreateDemandInputDTO {
 
 export interface CreateDemandOutputDTO {
     output : {
-        id:number
         status:string
         name:string
         owner:string

@@ -1,13 +1,15 @@
+import { Demands } from "../../database/entities/Demands";
+import { User } from "../../database/entities/RegisterUser";
 import { statusDemand } from "../../database/Enums";
-import { AlterStatusWhInputDTO, AlterStatusWhOutputDTO } from "../../usecase/demand/alter-status-webhook/AlterStatusWhDTO";
-import { CancelDemandInputDTO, CancelDemandOutputDTO } from "../../usecase/demand/cancel-demand/CancelDemandDTO";
-import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../usecase/demand/create-demand/CreateDemandDTO";
-import { ListDemandOutputDTO } from "../../usecase/demand/list-demand/ListDemandDTO";
+import { AlterStatusWhInputDTO, AlterStatusWhOutputDTO } from "../../DTOs/demand/AlterStatusWhDTO";
+import { CancelDemandInputDTO, CancelDemandOutputDTO } from "../../DTOs/demand/CancelDemandDTO";
+import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../DTOs/demand/CreateDemandDTO";
+import { ListDemandOutputDTO } from "../../DTOs/demand/ListDemandDTO";
 
 export interface iDemandRepository {
-    createDemand(demand:CreateDemandInputDTO):Promise<CreateDemandOutputDTO>
-    cancel(input:CancelDemandInputDTO):Promise<CancelDemandOutputDTO>
-    findDemand(id:number):Promise<{id:number, ownerId:string, status:statusDemand} | null>
-    alterStatus(input:AlterStatusWhInputDTO):Promise<AlterStatusWhOutputDTO>
-    list(id:string):Promise<ListDemandOutputDTO[]>
+    createDemand(user:User, name:string, description:string):Promise<Demands>
+    cancel(input:CancelDemandInputDTO):Promise<boolean>
+    findDemand(id:number):Promise<Demands | null>
+    alterStatus(input:AlterStatusWhInputDTO):Promise<boolean>
+    list(id:string):Promise<Demands[]>
 }

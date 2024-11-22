@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from "../../usecase/user/user-create-login/CreateUserUseCase";
 import { Request, Response } from "express";
-import { CreateUserInputDTO } from "../../usecase/user/user-create-login/CreateUserDTO";
+import { CreateUserInputDTO } from "../../DTOs/user/CreateUserDTO";
 import {z} from "zod"
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
 

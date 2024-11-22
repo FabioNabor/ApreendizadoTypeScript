@@ -1,4 +1,4 @@
-import { statusDemand } from "../../../database/Enums"
+
 
 export interface ListDemandOutputDTO {
     output : {

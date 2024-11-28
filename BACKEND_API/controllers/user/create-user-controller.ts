@@ -6,7 +6,7 @@ import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
 
 export class CreateUserController extends BaseControllerService{
 
-    private constructor (data:RouteConstructor){super(data)}
+    private constructor (protected readonly data:RouteConstructor){super(data)}
 
     public static create(service:CreateUserUseCase) {
         return new CreateUserController({

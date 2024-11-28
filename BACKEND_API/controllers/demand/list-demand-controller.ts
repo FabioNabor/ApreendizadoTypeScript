@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 export class ListDemandController 
     extends BaseControllerService {
     private constructor (
-        data:RouteConstructor
+        protected readonly data:RouteConstructor
     ){
         super(data)
     }

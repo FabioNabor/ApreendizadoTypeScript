@@ -5,7 +5,7 @@ import { UserLoignInputDTO, UserLoignOutputDTO } from "../../DTOs/user/UserLogin
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
 
 export class UserLoginController extends BaseControllerService {
-    private constructor (data:RouteConstructor){super(data)}
+    private constructor (protected readonly data:RouteConstructor){super(data)}
     
     public static create(service:UserLoginUseCase) {
         return new UserLoginController({

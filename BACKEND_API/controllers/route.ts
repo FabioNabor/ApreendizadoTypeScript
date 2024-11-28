@@ -25,7 +25,6 @@ export interface Route {
 
 }
 
-
 export abstract class BaseControllerService implements Route {
     protected constructor(
         protected readonly data:RouteConstructor

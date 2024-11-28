@@ -23,7 +23,6 @@ export const auth = async (request:Request, response:Response ,next:NextFunction
         }
 
         const decoded = await authService.verifyToken(jwt_token)
-
         request.body.infUser = decoded
 
         next()

@@ -4,10 +4,13 @@ import {z} from "zod"
 import { BaseControllerService, HttpMethod, RouteConstructor } from "../route";
 import { AlterPasswordUseCase } from "../../usecase/user/user-alter-password/AlterPasswordUseCase";
 import { AlterPasswordInputDtO } from "../../DTOs/user/AlterPasswordDTO";
+import { addRoute } from "../../api/add-controller-routes";
+
+
 
 export class AlterPasswordController extends BaseControllerService{
 
-    private constructor (data:RouteConstructor){super(data)}
+    private constructor (protected readonly data:RouteConstructor){super(data)}
     
     public static create(service:AlterPasswordUseCase) {
         return new AlterPasswordController({

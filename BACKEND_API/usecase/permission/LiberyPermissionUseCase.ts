@@ -1,4 +1,4 @@
-import { LiberyPermissionInputDTO, LiberyPermissionOutputDTO } from "../../DTOs/permission/liberyPermissionDTO";
+import { LiberyPermissionInputDTO, LiberyPermissionOutputDTO } from "../../DTOs/permission/LiberyPermissionDTO";
 import { iPermissionRepository } from "../../repository/permission/iPermissionRepository";
 import { iUserRepository } from "../../repository/user/iUserRepository";
 import { UseCase } from "../UseCase";

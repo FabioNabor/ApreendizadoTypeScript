@@ -6,7 +6,7 @@ import { AlterStatusWhInputDTO } from "../../DTOs/demand/AlterStatusWhDTO";
 
 export class AlterStatusWhController extends BaseControllerService{
 
-    private constructor (data:RouteConstructor){super(data)}
+    private constructor (protected readonly data:RouteConstructor){super(data)}
 
     public static create(service:AlterStatusWhUseCase) {
         return new AlterStatusWhController({

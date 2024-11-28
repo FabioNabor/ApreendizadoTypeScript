@@ -2,19 +2,19 @@ import { ExpressApi } from "../api/express/api.express"
 import { AppDataSource } from "../database/dataSource"
 import { Demands } from "../database/entities/Demands"
 import { User } from "../database/entities/RegisterUser"
-import { ListDemandController } from "../controllers/demand/ListDemandController"
+import { ListDemandController } from "../controllers/demand/list-demand-controller"
 import { ListDemandUseCase } from "../usecase/demand/list-demand/ListDemandUseCase"
-import { CreateUserController } from "../controllers/user/CreateUserController"
+import { CreateUserController } from "../controllers/user/create-user-controller"
 import { CreateUserUseCase } from "../usecase/user/user-create-login/CreateUserUseCase"
-import { UserLoginController } from "../controllers/user/UserLoginController"
+import { UserLoginController } from "../controllers/user/login-user-controller"
 import { UserLoginUseCase } from "../usecase/user/user-login/UserLoginUseCase"
 import { AlterPasswordUseCase } from "../usecase/user/user-alter-password/AlterPasswordUseCase"
-import { AlterPasswordController } from "../controllers/user/AlterPasswordController"
+import { AlterPasswordController } from "../controllers/user/alter-password-controller"
 import { CancelDemandUseCase } from "../usecase/demand/cancel-demand/CancelDemandUseCase"
-import { CreateDemandController } from "../controllers/demand/CreateDemandController"
+import { CreateDemandController } from "../controllers/demand/create-demand-controller"
 import { CreateDemandUseCase } from "../usecase/demand/create-demand/CreateDemandUseCase"
-import { CancelDemandController } from "../controllers/demand/CancelDemandController"
-import { AlterStatusWhController } from "../controllers/demand/AlterStatusWhController"
+import { CancelDemandController } from "../controllers/demand/cancel-demand-controller"
+import { AlterStatusWhController } from "../controllers/demand/alter-status-wh-demand-controller"
 import { AlterStatusWhUseCase } from "../usecase/demand/alter-status-webhook/AlterStatusWhUseCase"
 import { PostgresUserRepository } from "../repository/implements/postgres/user-implement.postgres"
 import { PostgresDemandRepository } from "../repository/implements/postgres/demand-implement.postgres"
@@ -23,8 +23,9 @@ import { PostgresPermissionRepository } from "../repository/implements/postgres/
 import { Permission } from "../database/entities/Permission"
 import { userPermission } from "../database/entities/UserPermission"
 import { RemovePermissionUseCase } from "../usecase/permission/RemovePermissionUseCase"
-import { LiberyPermissionController } from "../controllers/permission/LiberyPermissionController"
-import { RemovePermissionController } from "../controllers/permission/RemovePermissionController"
+import { LiberyPermissionController } from "../controllers/permission/libery-permission-controller"
+import { RemovePermissionController } from "../controllers/permission/remove-permission-controller.ts"
+import { addRoute, routes } from "../api/add-controller-routes"
 
 const main = () => {
 
@@ -43,9 +44,9 @@ const main = () => {
     const createUserUseCase = CreateUserUseCase.create(userRepository)
     const userAlterPasswordUsecase = AlterPasswordUseCase.create(userRepository)
     
-    const loginRoute = UserLoginController.create(userLoginUseCase)
-    const createUserRoute = CreateUserController.create(createUserUseCase)
-    const userAlterRoute = AlterPasswordController.create(userAlterPasswordUsecase)
+    addRoute(UserLoginController.create(userLoginUseCase))
+    addRoute(CreateUserController.create(createUserUseCase))
+    addRoute(AlterPasswordController.create(userAlterPasswordUsecase))
 
     // DEMAND
     const listDemandUseCase = ListDemandUseCase.create(demandRepository)
@@ -53,26 +54,19 @@ const main = () => {
     const cancelDemandUseCase = CancelDemandUseCase.create(demandRepository) 
     const alterStatusUseCase = AlterStatusWhUseCase.create(demandRepository)
 
-    const listDemandRoute = ListDemandController.create(listDemandUseCase)
-    const createDemandRoute = CreateDemandController.create(createDemandUseCase)
-    const cancelDemandRoute = CancelDemandController.create(cancelDemandUseCase)
-    const alterStatusRoute = AlterStatusWhController.create(alterStatusUseCase)
+    addRoute(ListDemandController.create(listDemandUseCase))
+    addRoute(CreateDemandController.create(createDemandUseCase))
+    addRoute(CancelDemandController.create(cancelDemandUseCase))
+    addRoute(AlterStatusWhController.create(alterStatusUseCase))
 
     // PERMISSION
 
     const liberyPermissionUseCase = LiberyPermissionUseCase.create(permissionRepository, userRepository)
     const removePermissionUseCase = RemovePermissionUseCase.create(permissionRepository, userRepository)
 
-    const liberyPermissionRoute = LiberyPermissionController.create(liberyPermissionUseCase)
-    const removePermissionRoute = RemovePermissionController.create(removePermissionUseCase)
-
-    const routes = [
-        loginRoute, createUserRoute, userAlterRoute,
-        listDemandRoute, createDemandRoute,cancelDemandRoute,
-        alterStatusRoute,
-        liberyPermissionRoute,
-        removePermissionRoute
-    ]
+    addRoute(LiberyPermissionController.create(liberyPermissionUseCase))
+    addRoute(LiberyPermissionController.create(liberyPermissionUseCase))
+    addRoute(RemovePermissionController.create(removePermissionUseCase))
 
     const api = ExpressApi.create(routes)
     api.start(3030)

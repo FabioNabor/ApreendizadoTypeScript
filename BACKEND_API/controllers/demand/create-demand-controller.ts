@@ -6,7 +6,7 @@ import { CreateDemandInputDTO, CreateDemandOutputDTO } from "../../DTOs/demand/C
 
 export class CreateDemandController extends BaseControllerService{
 
-    private constructor (data:RouteConstructor){super(data)}
+    private constructor (protected readonly data:RouteConstructor){super(data)}
 
     public static create(service:CreateDemandUseCase) {
         return new CreateDemandController({
